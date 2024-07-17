@@ -1,0 +1,191 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* my styles */
+html body{
+    background-image: url("/background.png");
+    background-size: cover;
+    font-family: sans-serif;
+    height: 100%;
+    overflow: auto;
+
+}   
+main{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    position: relative;
+}
+main button{
+    background-color: black;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 20px 30px;
+}
+main button:hover{
+    background-color: rgb(26, 26, 26);
+    box-shadow: 1px 1px 5px gray;
+}
+
+/* wrapper styles */
+.form-wrapper{
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: none;
+    justify-content: center;
+    min-height: 100%;
+    padding: 30px;
+    overflow: auto;
+    top: 0;
+    position: absolute;
+    width: 100%;
+}
+.display-flex{
+    display: flex;
+}
+
+/* form styles */
+.register-form{
+    background-color: rgb(215, 215, 215);
+    border-radius: 15px;
+    max-width: 600px;
+    padding: 30px;
+    overflow: auto;
+    width: 85%;
+}
+.register-form span{
+    cursor: pointer;
+    float: right;
+}
+.register-form h4{
+    font-size: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.register-form .form-content{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.form-content fieldset{
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    position: relative;
+    width: 48%;
+}
+.form-content fieldset label{
+    display: block;
+    font-size: 14px;
+}
+.form-content fieldset input{
+    border: 1px solid #DBDBDB;
+    border-radius: 8px;
+    box-sizing: border-box;
+    margin: 8px 0;
+    padding: 8px 10px;
+    width: 100%;
+}
+.form-content div.passwords{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    width: 100%;
+}
+fieldset.marginb-0{
+    margin-bottom: 0;
+}
+fieldset input#password, input#password-confirm {
+    position: relative;
+}
+#password-icon, #password-confirm-icon{
+    position: absolute;
+    bottom: 15px;
+    right: 10px;
+}
+legend{
+    color: red;
+    font-size: 12px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.form-content fieldset.date-fieldset{
+    width: 100%;
+}
+fieldset.date-fieldset div{
+    display: flex;
+    justify-content: space-between;
+}
+.form-content fieldset select{
+    border: 1px solid #DBDBDB;
+    border-radius: 8px;
+    margin-top: 8px;
+    padding: 8px 10px;
+    width: 31%;
+}
+.form-content .button-fieldset {
+    margin: 8px 0;
+    width: 100%;
+}
+fieldset.button-fieldset input[type="submit"]{
+    background-color: black;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    text-transform: capitalize;
+    padding: 12px;
+    margin: 8px 0;
+    width: 100%;
+}
+fieldset.button-fieldset input[type="submit"]:hover{
+    background-color: rgb(30, 30, 30);
+}
+.margin-right{
+    margin-right: 21px;
+}

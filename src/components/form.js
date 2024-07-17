@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // se mantiene una clara separación entre la lógica de validación y la definición de los datos estáticos.
 const months = [...Array(12).keys()].map((month) => new Date(0, month).toLocaleString('en', {month: 'long'}));
@@ -7,6 +7,7 @@ const years = [...Array(125).keys()].map((year)=> 1900 + year);
 
 export default function Form({isOpen, toggleIsOpen}) {
     const [errorMessage, setErrorMessage] = useState('');
+    const [userModel, setUserModel] = useState({});
     
     function toggleInput(id){
         let eyeOffIcon = (`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye-slash" viewBox="0 0 16 16">
@@ -25,47 +26,39 @@ export default function Form({isOpen, toggleIsOpen}) {
         input.type === "password" ? icon.innerHTML = eyeOffIcon : icon.innerHTML = eyeOnIcon;
     };
 
-    function handlePassword(){
-        const password = document.getElementById('password').value;
-        // establece la valides del formulario cuando comienza
-        let isValid = true;
+    useEffect(() => {
+        if(userModel?.password){
+            //limpia los mensajes antes de seguir a la otra validacion
+            setErrorMessage('');
+            if (userModel.password.length < 6) {
+                setErrorMessage('Password must be at least 6 characters long');
+            } else if (!/[A-Z]/.test(userModel.password)) {
+                setErrorMessage('Password must contain at least one uppercase letter');
+            } else if (!/[a-z]/.test(userModel.password)) {
+                setErrorMessage('Password must contain at least one lowercase letter');
+            } else if (!/\d/.test(userModel.password)) {
+                setErrorMessage('Password must contain at least one number');
+            } else if (!/[!@#$%^&*]/.test(userModel.password)) {
+                setErrorMessage('Password must contain at least one special character');
+            } 
+        }
+    },[userModel])
 
-        //limpia los mensajes antes de seguir a la otra validacion
-        setErrorMessage('');
-
-        if (password.length < 6) {
-            setErrorMessage('Password must be at least 6 characters long');
-            isValid = false;
-        } else if (!/[A-Z]/.test(password)) {
-            setErrorMessage('Password must contain at least one uppercase letter');
-            isValid = false;
-        } else if (!/[a-z]/.test(password)) {
-            setErrorMessage('Password must contain at least one lowercase letter');
-            isValid = false;
-        } else if (!/\d/.test(password)) {
-            setErrorMessage('Password must contain at least one number');
-            isValid = false;
-        } else if (!/[!@#$%^&*]/.test(password)) {
-            setErrorMessage('Password must contain at least one special character');
-            isValid = false;
-        } 
-        //establece que esta listo para ser enviado
-        return isValid
-    };
+    useEffect(() => {
+        if(userModel?.passwordConfirm){
+            if (userModel.password !== userModel.passwordConfirm) {
+                setErrorMessage('Passwords must be equal (Passwords do not match)');
+            }else{
+                setErrorMessage('');
+            }
+        }
+    },[userModel])
 
     function handleSubmit(event) {
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('password-confirm').value;
-
         // previene que se refresque la pagina inecesariamente
         event.preventDefault();
-        if (password !== confirmPassword) {
-            setErrorMessage('Passwords must be equal (Passwords do not match)');
-            // si si existe un error en las contraseñas detenga el codigo aqui
-            return;
-        }
-        setErrorMessage('');
-        event.target.reset();
+        setUserModel({});
+        event.target.reset()
         // un segundo despues de que se limpia el el formulario se confirma y se cierra
         setTimeout(() => {
             alert('Form submitted successfully!');
@@ -85,29 +78,54 @@ export default function Form({isOpen, toggleIsOpen}) {
             <div className="form-content">
                 <fieldset>
                     <label htmlFor="first-name">First name</label>
-                    <input id="first-name" name="first-name" type="text" placeholder="First name" required/>
+                    <input 
+                        id="first-name" 
+                        name="first-name" 
+                        type="text" 
+                        placeholder="First name" 
+                        onChange={(event) => setUserModel({...userModel, firstName: event.target.value})}
+                        required
+                    />
                 </fieldset>
                 <fieldset>
                     <label htmlFor="last-name">Last name</label>
-                    <input id="last-name" name="last-name" type="text" placeholder="Last name"  required/>
+                    <input 
+                        id="last-name" 
+                        name="last-name" 
+                        type="text" 
+                        placeholder="Last name"
+                        onChange={(event) => setUserModel({...userModel, lastName: event.target.value})}
+                        required
+                    />
                 </fieldset>
                 <fieldset>
                     <label htmlFor="mail">Email address</label>
-                    <input id="mail" name="mail" type="email" placeholder="Email address"  required/>
+                    <input 
+                        id="mail" 
+                        name="mail" 
+                        type="email" 
+                        placeholder="Email address"  
+                        onChange={(event) => setUserModel({...userModel, email: event.target.value})}
+                        required
+                    />
                 </fieldset>
                 <fieldset>
                     <label htmlFor="company">Company</label>
-                    <input id="company" name="company" type="text" placeholder="Company"  required/>
+                    <input 
+                        id="company" 
+                        name="company" 
+                        type="text" 
+                        placeholder="Company"
+                        onChange={(event) => setUserModel({...userModel, company: event.target.value})}
+                        required
+                    />
                 </fieldset>
                 <fieldset className="marginb-0">
                     <label htmlFor="password">Password</label>
                     <input 
                         type="password" 
                         id="password"  
-                        // validación en tiempo real de la contraseña a medida que se escribe.
-                        onInput={handlePassword}
-                        // validación al salir del campo la contraseña a medida que se escribe.
-                        onBlur={handlePassword}  
+                        onChange={(event) => setUserModel({...userModel, password: event.target.value})}
                         required
                     />
                     <span id="password-icon" onClick={() => toggleInput("password")}>
@@ -123,8 +141,7 @@ export default function Form({isOpen, toggleIsOpen}) {
                     <input 
                         type="password" 
                         id="password-confirm"
-                        onInput={handlePassword}
-                        onBlur={handlePassword}  
+                        onChange={(event) => setUserModel({...userModel, passwordConfirm: event.target.value})}
                         required
                     />
                     <span id="password-confirm-icon" onClick={() => toggleInput("password-confirm")}>
@@ -139,25 +156,44 @@ export default function Form({isOpen, toggleIsOpen}) {
                 
                 <fieldset>
                     <label htmlFor="address">Address</label>
-                    <input name="address" id="address"type="text" placeholder="Address"  required/>
+                    <input 
+                        name="address" 
+                        id="address"
+                        type="text" 
+                        placeholder="Address"  
+                        onChange={(event) => setUserModel({...userModel, address: event.target.value})}
+                        required
+                    />
                 </fieldset>
                 <fieldset className="date-fieldset">
                     <label>Date of birth</label>
                     <div>
-                        <select required >
-                            <option disabled  selected>Month</option>
+                        <select 
+                            defaultValue="Month" 
+                            onChange={(event) => setUserModel({...userModel, month: event.target.value})}
+                            required  
+                        >
+                            <option disabled value="Month" >Month</option>
                             {months.map((month, index)=>(
                             <option key={index} value={month}>{month}</option>
                             ))}
                         </select>
-                        <select  required>
-                            <option disabled  selected>Day</option>
+                        <select 
+                            defaultValue="Day" 
+                            onChange={(event) => setUserModel({...userModel, day: event.target.value})}
+                            required
+                        >
+                            <option value="Day" disabled>Day</option>
                             {days.map((day, index2)=> (
                                 <option key={index2} value={day + 1}>{day + 1}</option>
                             ))}
                         </select>
-                        <select  required>
-                            <option disabled  selected>Year</option>
+                        <select 
+                            defaultValue="Year" 
+                            onChange={(event) => setUserModel({...userModel, year: event.target.value})}
+                            required
+                        >
+                            <option disabled value="Year">Year</option>
                             {years.map((year, index3)=> (
                             <option key={index3} value={year}>{year}</option>
                             ))}
